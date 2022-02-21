@@ -34,8 +34,7 @@ export class Employee {
   ) {}
 
   /**
-   * 入社日を「YYYY年MM月DD日」という形でフォーマットして返す.
-   *
+   * 入社日を「YYYY年MM月DD日」という形でフォーマットする.
    *
    * @returns 「YYYY年MM月DD日」という形でフォーマットされた
    */
