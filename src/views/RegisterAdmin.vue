@@ -84,6 +84,8 @@ export default class RegisterAdmin extends Vue {
   private mailAddress = "";
   // パスワード
   private password = "";
+  // エラーメッセージ
+  private errorMessage = "";
 
   /**
    * 管理者情報を登録する.
@@ -99,9 +101,12 @@ export default class RegisterAdmin extends Vue {
       mailAddress: this.mailAddress,
       password: this.password,
     });
-    console.dir("response:" + JSON.stringify(response));
-
-    this.$router.push("/loginAdmin");
+    console.dir(JSON.stringify(response));
+    if (response.data.status === "success") {
+      this.$router.push("/loginAdmin");
+    } else if (response.data.status === "error") {
+      this.errorMessage = "登録に失敗しました" + response.data.message;
+    }
   }
 }
 </script>
