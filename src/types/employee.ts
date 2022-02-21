@@ -36,8 +36,7 @@ export class Employee {
   /**
    * 入社日を「YYYY年MM月DD日」という形でフォーマット.
    *
-   *
-   * @returns 「YYYY年MM月DD日」という形でフォーマットされた入社日
+   * @returns 「YYYY年MM月DD日」という形でフォーマットされた
    */
   public get formatHireDate(): string {
     return format(this.hireDate, "yyyy年MM月dd日");
