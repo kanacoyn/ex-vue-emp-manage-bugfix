@@ -65,6 +65,8 @@ export default class LoginAdmin extends Vue {
   private mailAddress = "";
   // パスワード
   private password = "";
+  // エラーメッセージ
+  private errorMessage = "";
 
   /**
    * ログインする.
@@ -79,9 +81,11 @@ export default class LoginAdmin extends Vue {
       password: this.password,
     });
     console.dir("response:" + JSON.stringify(response));
-
-    // 従業員一覧に遷移する
-    this.$router.push("/employeeList");
+    if (response.data.status === "success") {
+      this.$router.push("/employeeList");
+    } else if (response.data.status === "error") {
+      this.errorMessage = "ログインに失敗" + response.data.message;
+    }
   }
 }
 </script>
