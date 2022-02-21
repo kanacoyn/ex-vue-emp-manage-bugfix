@@ -34,13 +34,21 @@ export class Employee {
   ) {}
 
   /**
-   * 入社日を「YYYY年MM月DD日」という形でフォーマットして返すGetter.
+   * 入社日を「YYYY年MM月DD日」という形でフォーマット.
    *
-   *
-   * @returns 「YYYY年MM月DD日」という形でフォーマットされた入社日
+   * @returns 「YYYY年MM月DD日」という形でフォーマットされた
    */
   public get formatHireDate(): string {
     return format(this.hireDate, "yyyy年MM月dd日");
+  }
+
+  /**
+   * 給料をカンマ区切りでフォーマット.
+   *
+   * @returns カンマ区切りでフォーマットされた給料
+   */
+  public get formatSalary(): string {
+    return this.salary.toLocaleString();
   }
 
   public get id(): number {
