@@ -102,8 +102,7 @@ export default class RegisterAdmin extends Vue {
       mailAddress: this.mailAddress,
       password: this.password,
     });
-    console.dir("response:" + JSON.stringify(response));
-
+    console.dir(JSON.stringify(response));
     if (response.data.status === "success") {
       this.$router.push("/loginAdmin");
     } else if (response.data.status === "error") {
