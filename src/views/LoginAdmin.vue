@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <div class="row login-page">
+      <div class="error">{{ errorMessage }}</div>
       <div class="col s12 z-depth-6 card-panel">
         <form class="login-form">
           <div class="row"></div>
@@ -65,6 +66,8 @@ export default class LoginAdmin extends Vue {
   private mailAddress = "";
   // パスワード
   private password = "";
+  // エラーメッセージ
+  private errorMessage = "";
 
   /**
    * ログインする.
@@ -79,9 +82,13 @@ export default class LoginAdmin extends Vue {
       password: this.password,
     });
     console.dir("response:" + JSON.stringify(response));
-
-    // 従業員一覧に遷移する
-    this.$router.push("/employeeList");
+    // ログイン可能なら従業員一覧に遷移する
+    if (response.data.status === "success") {
+      this.$router.push("/employeeList");
+      // エラーならログイン失敗と表示
+    } else if (response.data.status === "error") {
+      this.errorMessage = "ログインに失敗" + response.data.message;
+    }
   }
 }
 </script>

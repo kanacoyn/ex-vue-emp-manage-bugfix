@@ -4,6 +4,7 @@
       <form class="col s12" id="reg-form">
         <div class="row">
           <div class="input-field col s6">
+            <div class="error">{{ errorOfName }}</div>
             <input
               id="last_name"
               type="text"
@@ -26,6 +27,7 @@
         </div>
         <div class="row">
           <div class="input-field col s12">
+            <div class="error">{{ errorOfMailAddress }}</div>
             <input
               id="email"
               type="email"
@@ -38,6 +40,7 @@
         </div>
         <div class="row">
           <div class="input-field col s12">
+            <div class="error">{{ errorOfPassword }}</div>
             <input
               id="password"
               type="password"
@@ -84,6 +87,14 @@ export default class RegisterAdmin extends Vue {
   private mailAddress = "";
   // パスワード
   private password = "";
+  // エラーメッセージ
+  private errorMessage = "";
+  // 姓名エラーメッセージ
+  private errorOfName = "";
+  // メールアドレスエラーメッセージ
+  private errorOfEmail = "";
+  // パスワードエラーメッセージ
+  private errorOfPassword = "";
 
   /**
    * 管理者情報を登録する.
@@ -93,15 +104,47 @@ export default class RegisterAdmin extends Vue {
    * @returns Promiseオブジェクト
    */
   async registerAdmin(): Promise<void> {
+    if (this.hasErrors()) {
+      return;
+    }
+
     // 管理者登録処理
     const response = await axios.post(`${config.EMP_WEBAPI_URL}/insert`, {
       name: this.lastName + " " + this.firstName,
       mailAddress: this.mailAddress,
       password: this.password,
     });
-    console.dir("response:" + JSON.stringify(response));
+    console.dir(JSON.stringify(response));
+    if (response.data.status === "success") {
+      this.$router.push("/loginAdmin");
+    } else if (response.data.status === "error") {
+      this.errorMessage = "登録に失敗しました" + response.data.message;
+    }
+  }
 
-    this.$router.push("/loginAdmin");
+  /**
+   * エラーチェック処理.
+   *
+   * @returns エラーがある:true / エラーがない:false
+   */
+  private hasErrors(): boolean {
+    let hasError = false;
+    this.errorOfName = "";
+    this.errorOfEmail = "";
+    this.errorOfPassword = "";
+    if (this.lastName === "" || this.firstName === "") {
+      this.errorOfName = "姓または名が入力されていません";
+      hasError = true;
+    }
+    if (this.mailAddress === "") {
+      this.errorOfEmail = "メールアドレスが入力されていません";
+      hasError = true;
+    }
+    if (this.password === "") {
+      this.errorOfPassword = "パスワードが入力されていません";
+      hasError = true;
+    }
+    return hasError;
   }
 }
 </script>
