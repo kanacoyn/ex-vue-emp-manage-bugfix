@@ -10,9 +10,9 @@
     </nav>
 
     <form>
-      <div class="error">{{ searchNameMessage }}</div>
       <input id="searchName" type="text" v-model="searchName" />
       <label for="searchName">検索したい名前(部分一致検索)</label>
+      <div class="error">{{ searchNameError }}</div>
       <div class="searchBtn">
         <button
           class="btn btn-register waves-effect waves-light"
@@ -106,6 +106,8 @@ export default class EmployeeList extends Vue {
     this.currentEmployeeList = this.$store.getters.getSearchEmployeeByName(
       this.searchName
     );
+    this.searchNameError = "";
+
     // 検索されない場合は、メッセージを出して全件検索を行う
     if (this.currentEmployeeList.length === 0 || this.searchName === "") {
       this.searchNameError = "１件もありませんでしたので全件検索します";
