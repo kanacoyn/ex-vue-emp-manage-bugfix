@@ -15,8 +15,8 @@
                 v-model="mailAddress"
               />
               <label for="mailAddress" data-error="wrong" data-success="right"
-                >メールアドレス</label
-              >
+                >メールアドレス
+              </label>
             </div>
           </div>
           <div class="row">
