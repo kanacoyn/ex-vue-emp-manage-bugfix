@@ -146,9 +146,30 @@ export default class EmployeeDetail extends Vue {
    * Vuexストア内のGetterを呼ぶ。
    * ライフサイクルフックのcreatedイベント利用
    */
-  created(): void {
+  async created(): Promise<void> {
     // 送られてきたリクエストパラメータのidをnumberに変換して取得する
     const employeeId = parseInt(this.$route.params.id);
+
+    const response = await axios.get(
+      `${config.EMP_WEBAPI_URL}/employee/${employeeId}`
+    );
+    console.dir(JSON.stringify(response));
+
+    let responseEmployee = response.data.employee;
+    this.currentEmployee = new Employee(
+      responseEmployee.id,
+      responseEmployee.name,
+      responseEmployee.image,
+      responseEmployee.gender,
+      responseEmployee.formatHireDate,
+      responseEmployee.mailAddress,
+      responseEmployee.zipCode,
+      responseEmployee.address,
+      responseEmployee.telephone,
+      responseEmployee.salary,
+      responseEmployee.characteristics,
+      responseEmployee.dependentsCount
+    );
 
     // VuexストアのGetter、getEmployeeById()メソッドに先ほど取得したIDを渡し、１件の従業員情報を取得し、戻り値をcurrentEmployee属性に代入する
     this.currentEmployee = this.$store.getters.getEmployeeById(employeeId);
