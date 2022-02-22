@@ -70,6 +70,17 @@ export default new Vuex.Store({
           )
         );
       }
+
+      /**
+       * 従業員一覧を入社年月の昇順に並び替える
+       */
+      state.employees.sort(function(a, b) {
+        if (a.hireDate > b.hireDate) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
     },
   }, // end mutations
   getters: {
