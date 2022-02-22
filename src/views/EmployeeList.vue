@@ -8,6 +8,21 @@
         </div>
       </div>
     </nav>
+
+    <form>
+      <input id="searchName" type="text" v-model="searchName" />
+      <label for="searchName">検索したい名前(部分一致検索)</label>
+      <div class="error">{{ searchNameError }}</div>
+      <div class="searchBtn">
+        <button
+          class="btn btn-register waves-effect waves-light"
+          type="button"
+          v-on:click="onSearchClick"
+        >
+          検索する
+        </button>
+      </div>
+    </form>
     <div>従業員数:{{ getEmployeeCount }}人</div>
     <div class="row">
       <table class="striped">
@@ -47,6 +62,10 @@ export default class EmployeeList extends Vue {
   private currentEmployeeList: Array<Employee> = [];
   // 従業員数
   private employeeCount = 0;
+  // 名前検索
+  private searchName = "";
+  // 名前検索していなかった場合
+  private searchNameError = "";
 
   /**
    * Vuexストアのアクション経由で非同期でWebAPIから従業員一覧を取得する.
@@ -73,6 +92,28 @@ export default class EmployeeList extends Vue {
    */
   get getEmployeeCount(): number {
     return this.currentEmployeeList.length;
+  }
+
+  /**
+   * あいまい検索をする.
+   *
+   * @remarks
+   * Vuexストアから検索文字列に一致したものを絞り込んで出力
+   * ない場合は「１件もありませんでしたので全件表示します」と出力して全件検索を行います。
+   */
+  onSearchClick(): void {
+    // 入力された文字列で絞り込みを行う
+    this.currentEmployeeList = this.$store.getters.getSearchEmployeeByName(
+      this.searchName
+    );
+    this.searchNameError = "";
+
+    // 検索されない場合は、メッセージを出して全件検索を行う
+    if (this.currentEmployeeList.length === 0 || this.searchName === "") {
+      this.searchNameError = "１件もありませんでしたので全件検索します";
+      this.currentEmployeeList = this.$store.getters.getAllEmployees;
+      this.searchName = "";
+    }
   }
 }
 </script>

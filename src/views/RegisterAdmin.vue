@@ -68,6 +68,15 @@
           </div>
         </div>
 
+        <label for="zipCode">郵便番号(ハイフンあり)</label>
+        <button
+          class="btn btn-small btn-register waves-effect waves-light"
+          type="button"
+          v-on:click="searchAddress"
+        >
+          住所検索
+        </button>
+
         <div class="row">
           <div class="input-field col s6">
             <button
@@ -89,6 +98,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import config from "@/const/const";
 import axios from "axios";
+// import axiosJsonpAdapter from "axios-jsonp";
 
 /**
  * 管理者登録をする画面.
@@ -114,6 +124,10 @@ export default class RegisterAdmin extends Vue {
   private errorOfPassword = "";
   // 確認用パスワード
   private confirmPassword = "";
+  // 郵便番号
+  private zipCode = "";
+  // 住所
+  private address = "";
 
   /**
    * 管理者情報を登録する.
@@ -168,6 +182,22 @@ export default class RegisterAdmin extends Vue {
       hasError = true;
     }
     return hasError;
+  }
+
+  /**
+   * 郵便番号から住所を検索する.
+   */
+  async searchAddress(): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const axiosJsonpAdapter = require("axios-jsonp");
+    const response = await axios.get("https://zipcoda.net/api", {
+      adapter: axiosJsonpAdapter,
+      params: {
+        zipcode: this.zipCode,
+      },
+    });
+    console.dir(JSON.stringify(response));
+    this.address = response.data.items[0].address;
   }
 }
 </script>
