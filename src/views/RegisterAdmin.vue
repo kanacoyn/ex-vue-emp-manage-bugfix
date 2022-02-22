@@ -53,6 +53,21 @@
             <label for="password">パスワード</label>
           </div>
         </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <input
+              id="confirmPassword"
+              type="password"
+              class="validate"
+              minlength="8"
+              v-model="password"
+              required
+            />
+            <label for="confirmPassword">確認用パスワード</label>
+          </div>
+        </div>
+
         <div class="row">
           <div class="input-field col s6">
             <button
@@ -97,6 +112,8 @@ export default class RegisterAdmin extends Vue {
   private errorOfEmail = "";
   // パスワードエラーメッセージ
   private errorOfPassword = "";
+  // 確認用パスワード
+  private confirmPassword = "";
 
   /**
    * 管理者情報を登録する.
@@ -144,6 +161,10 @@ export default class RegisterAdmin extends Vue {
     }
     if (this.password === "") {
       this.errorOfPassword = "パスワードが入力されていません";
+      hasError = true;
+    } else if (this.password !== this.confirmPassword) {
+      // パスワード一致チェック
+      this.errorOfPassword = "パスワードが不一致です";
       hasError = true;
     }
     return hasError;
